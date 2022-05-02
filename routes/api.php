@@ -1,4 +1,6 @@
 <?php
+
+    use App\Http\Controllers\ProfileController;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\AuthController;
@@ -21,4 +23,12 @@
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/refresh', [AuthController::class, 'refresh']);
         Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    });
+
+    Route::group([
+        'middleware' => 'api',
+        'prefix' => 'profile'
+    ], function ($router) {
+        Route::get('/show', [ProfileController::class, 'show']);
+        Route::post('/edit', [ProfileController::class, 'edit']);
     });
