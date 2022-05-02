@@ -43,20 +43,17 @@
             $user = User::findOrFail($userId);
             $user->name = $request->input('name');
             $user->email = $request->input('email');
-
+            $user->location = $request->input('location') ?? '';
 
             if ($user->save()) {
-                return response()->json(
-                    [
-                        'data' => [
-                            'message' => 'User successfully updated',
-                            'access_token' => auth()->user()->getRememberToken()
-                        ]
-                    ]
-                    , 201);
+                return response()->json([
+                    'message' => 'User successfully updated',
+                    'status' => true
+                ], 201);
             } else {
                 return response()->json([
                     'message' => 'User was not successfully registered',
+                    'status' => false
                 ], 500);
             }
 
