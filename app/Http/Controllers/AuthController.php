@@ -1,8 +1,10 @@
 <?php
     namespace App\Http\Controllers;
+    use http\Env\Response;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
     use App\Models\User;
+    use Tymon\JWTAuth\Facades\JWTAuth;
     use Validator;
 
     class AuthController extends Controller
@@ -13,7 +15,7 @@
          * @return void
          */
         public function __construct() {
-            $this->middleware('auth:api', ['except' => ['login', 'register']]);
+            $this->middleware('auth:api', ['except' => ['login', 'register','refresh']]);
         }
         /**
          * Get a JWT via given credentials.
@@ -72,8 +74,19 @@
          * @return \Illuminate\Http\JsonResponse
          */
         public function refresh() {
-            return $this->createNewToken(auth()->refresh());
+            try {
+                $jwt = JWTAuth::parseToken()->authenticate();
+            } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                $jwt = false;
+            }
+            if (auth()->check() || $jwt) {
+                return $this->createNewToken(auth()->refresh());
+            } else {
+                return response('Unauthorized.', 401);
+            }
+
         }
+
         /**
          * Get the authenticated User.
          *

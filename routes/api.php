@@ -1,5 +1,6 @@
 <?php
 
+    use App\Http\Controllers\ChatController;
     use App\Http\Controllers\ProfileController;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Route;
@@ -22,6 +23,7 @@
         Route::post('/register', [AuthController::class, 'register']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/refresh', [AuthController::class, 'refresh']);
+        Route::post('/check-valid', [AuthController::class, 'check_valid']);
         Route::get('/user-profile', [AuthController::class, 'userProfile']);
     });
 
@@ -31,4 +33,11 @@
     ], function ($router) {
         Route::get('/show', [ProfileController::class, 'show']);
         Route::post('/edit', [ProfileController::class, 'edit']);
+    });
+
+    Route::group([
+        'middleware' => 'api',
+        'prefix' => 'message'
+    ], function ($router) {
+        Route::post('send', [ChatController::class, 'sendMessage']);
     });

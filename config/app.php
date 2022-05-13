@@ -199,6 +199,7 @@ return [
         //JWT Facades
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'LRedis'    => Illuminate\Support\Facades\Redis::class
     ])->toArray(),
 
 ];
